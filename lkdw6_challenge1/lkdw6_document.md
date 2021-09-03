@@ -14,9 +14,9 @@ Inorder to complete this challenge, i followed the lectures of Professor wergele
 * AWS console and connection to my instance using the following command :
 ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * During the initial connection to the instance, we do not have any users created, so we use ubuntu user to login and then add users according to the requirements.
-![Connection](screenshots\connection.png "Connection to aws instance")
+![Connection](screenshots/connection.png "Connection to aws instance")
 
-![AWS console](screenshots\console.png "AWS Console")
+![AWS console](screenshots/console.png "AWS Console")
 
 ### Step 2: 
 
@@ -33,15 +33,15 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
     * Click "hostname" to see if the changes occured.
     * Restart the ubuntu server and you can see the changes.
 
-![hostname](screenshots\hostname.png "hostname")
+![hostname](screenshots/hostname.png "hostname")
 
 * You can check the ubuntu version using : lsb_release -a
 
-![version](screenshots\version.png "version")
+![version](screenshots/version.png "version")
 
 * in /etc/hosts file add the ip address of your AWS instance and the domain you will be using and the name.
 
-![hosts](screenshots\hosts.png "hosts")
+![hosts](screenshots/hosts.png "hosts")
 
 
 ### Step 3: Set date
@@ -51,7 +51,7 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * UI pops up and select the date from the dropdown.
 * Set it to Central time.
 
-![time](screenshots\time.png "time")
+![time](screenshots/time.png "time")
 
 ### Step 4: Add limited user
 * try to SSH 'pawprint@ec2.amazonaws.com and see if you can successfully login.
@@ -63,11 +63,11 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * Add this user to sudo list using : adduser lkdw6 sudo
 * Then go to cat /etc/group and check user privileges.
 
-![user_permission](screenshots\user_permission.png "user_permission")
+![user_permission](screenshots/user_permission.png "user_permission")
 
 * You can use "sudo su lkdw6" for making lkdw6 as the current root.
 
-![make_root](screenshots\make_root.png "make_root")
+![make_root](screenshots/make_root.png "make_root")
 
 ### Step 5: Disallow root logins over SSH
 * try to SSH using root "ssh -i "CS7830.pem" root@ec2-52-91-204-205.compute-1.amazonaws.com".
@@ -79,34 +79,34 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * Change the permissions of .ssh folder using chmod 700 .ssh .
 * Generate the key using ssh-keygen -y file_name.
 * Paste this key inside the authorized_keys file.
-![ssh_key](screenshots\ssh_key.png "ssh_key")
+![ssh_key](screenshots/ssh_key.png "ssh_key")
 * Go to root using sudo -i. 
 * Open file vi /etc/ssh/sshd_config and change "Permit Root Login" to "no"
-![privilege_no](screenshots\privilege_no.png "privilege_no")
+![privilege_no](screenshots/privilege_no.png "privilege_no")
 * Restart the service using ssh restart.
 * Then you will see you have disabled root logins.
 
-![disallow_root](screenshots\disallow_root.png "disallow_root")
+![disallow_root](screenshots/disallow_root.png "disallow_root")
 
 ### Step 6: Setup Fail2Ban
 * Go to your server using " ssh -i "CS7830.pem" lkdw6@ec2-52-91-204-205.compute-1.amazonaws.com"
 * Install fail2ban using "sudo apt-get install fail2ban".
 * This will not allow bruteforce attacks my blocking IPs if they try to login a number of times.
 
-![fail2ban](screenshots\fail2ban.png "fail2ban")
+![fail2ban](screenshots/fail2ban.png "fail2ban")
 
 ### Step 7: Setup the uncomplicated firewall ufw to allow SSH,HTTP,HTTPS
 * 1.Run "sudo ufw status" to see if you get "OpenSSH", "Apache Full"
 * Check the app list using "sudo ufw app list".
-![ufw_applist](screenshots\ufw_applist.png "ufw_applist")
+![ufw_applist](screenshots/ufw_applist.png "ufw_applist")
 * Allow OpenSSH using "sudo ufw allow OpenSSH".
 * Enable this using "sudo ufw enable".
-![ufw_enable](screenshots\ufw_enable.png "ufw_enable")
+![ufw_enable](screenshots/ufw_enable.png "ufw_enable")
 * Install Apache using "sudo apt-get install apache2".
 * sudo "Apache Secure" installs only HTTPS and sudo "Apache" installs only HTTP.
 * we need to allow both HTTP and HTTPS so, we use "sudo ufw allow "Apache Full"". 
 * Check status using "sudo ufw status". You will see OpenSSH and Apache Full will be enabled.
-![ufw_status](screenshots\ufw_status.png "ufw_status")
+![ufw_status](screenshots/ufw_status.png "ufw_status")
 
 ### Step 8: Install LAMP stack
 * First install mysql using "sudo apt-get install mysql-server".
@@ -117,25 +117,25 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * Create database by using :create database dbname;
 * grant select, insert, update on database.* to 'lkdw6'@'localhost';
 
-![show_db](screenshots\show_db.png "show_db")
+![show_db](screenshots/show_db.png "show_db")
 * Install PHP using "sudo apt-get install php libapache2-mod-php php-mysql".
-![php](screenshots\php.png "php")
+![php](screenshots/php.png "php")
 * After you are done restart the service using : sudo service apache2 restart.
-![apache](screenshots\apache.png "apache")
+![apache](screenshots/apache.png "apache")
 
 ### Step 9: Add limited user to www-data group
 * run cat /etc/group to see if your pawprint is in the list of www-data group.
-![www-data](screenshots\www-data.png "www-data")
+![www-data](screenshots/www-data.png "www-data")
 * Run sudo usermod -a -G www-data lkdw6 for setting up sudo for lkdw6. 
-![www-data-mod](screenshots\www-data-mod.png "www-data-mod")
+![www-data-mod](screenshots/www-data-mod.png "www-data-mod")
 
 ### Step 10: Lockdown permissions to public_html folder
 * Run "ls -l /var/www/html" to see if the owner is your pawprint and the group owner is "www-data"  
-![lock-down-pms](screenshots\lock-down-pms.png "lock-down-pms")
+![lock-down-pms](screenshots/lock-down-pms.png "lock-down-pms")
 * Run "ls -l /var/www/html" and see what the permissions are. it should be 775 or "drwxrwxr-x"
 * Change the permissions to 775, using sudo chmod 775 /var/www/html
 * Run "ls -l /var/www/html/index.html" to see if the permission on the files are 664 or "-rw-rw-r--"
-![locked-html](screenshots\locked-html.png "locked-html")
+![locked-html](screenshots/locked-html.png "locked-html")
 
 * Create a new index.html file and put the default html in other file.
 * The default html page has a lot of information on apache, config files, etc.
@@ -144,15 +144,15 @@ ssh -i "CS7830.pem" ubuntu@ec2-52-91-204-205.compute-1.amazonaws.com
 * Created a demo html file.
 * Loaded the file inside w3 validator and checked for any errors.
 
-![doc_check](screenshots\doc_check.png "doc_check")
+![doc_check](screenshots/doc_check.png "doc_check")
 * Checked the errors line by line by inserting text
-![doc_check_text](screenshots\doc_check_text.png "doc_check_text")
+![doc_check_text](screenshots/doc_check_text.png "doc_check_text")
 
 ### Step 12: The demo of the websites on AWS public domain and personal domain
 * AWS public DNS demo
-![aws_demo](screenshots\aws_demo.png "aws_demo")
+![aws_demo](screenshots/aws_demo.png "aws_demo")
 * Personal website demo
-![domain_demo](screenshots\domain_demo.png "domain_demo")
+![domain_demo](screenshots/domain_demo.png "domain_demo")
 
 ## Below is the code i used for index.html page.
 
